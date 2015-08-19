@@ -17,3 +17,11 @@ gulp.task('build', ['copyIndex'], function (cb) {
   .pipe(webpack(webpackConfig))
   .pipe(gulp.dest(''));
 });
+
+gulp.task('watch', function() {
+  gulp.watch(['source/*.js'], ['build']);
+  gulp.watch(['source/*.jsx'], ['build']);
+  gulp.watch(['source/*.html'], ['build']);
+});
+
+gulp.task('default', ['build', 'watch']);
