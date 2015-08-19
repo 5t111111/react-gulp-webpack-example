@@ -1,6 +1,6 @@
 # React + Gulp + Webpack
 
-## Directroy Structure
+## Directory Structure
 
 ```text
 .
