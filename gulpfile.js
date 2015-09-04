@@ -1,27 +1,29 @@
 var gulp = require('gulp');
-var webpack = require('gulp-webpack');
+var webpack = require('webpack-stream');
+var del = require('del');
 var webpackConfig = require('./webpack.config.js');
 
-gulp.task('cleanBuild', function (cb) {
-  var rimraf = require('rimraf');
-  rimraf('build/', cb);
+var entry = "./source/entry.jsx";
+
+gulp.task('clean', function () {
+  return del(['build/**/*']);
 });
 
-gulp.task('copyIndex', ['cleanBuild'], function () {
+gulp.task('index', ['clean'], function () {
   return gulp.src('source/index.html')
   .pipe(gulp.dest('build/'));
 });
 
-gulp.task('build', ['copyIndex'], function (cb) {
-  return gulp.src('source/entry.js')
+gulp.task('webpack', ['index'], function () {
+  return gulp.src(entry)
   .pipe(webpack(webpackConfig))
   .pipe(gulp.dest(''));
 });
 
 gulp.task('watch', function() {
-  gulp.watch(['source/*.js'], ['build']);
-  gulp.watch(['source/*.jsx'], ['build']);
-  gulp.watch(['source/*.html'], ['build']);
+  gulp.watch(['source/*.js'], ['webpack']);
+  gulp.watch(['source/*.jsx'], ['webpack']);
+  gulp.watch(['source/*.html'], ['webpack']);
 });
 
-gulp.task('default', ['build', 'watch']);
+gulp.task('default', ['webpack', 'watch']);
